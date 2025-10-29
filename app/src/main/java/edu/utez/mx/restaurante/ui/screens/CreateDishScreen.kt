@@ -22,12 +22,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import edu.utez.mx.restaurante.R
 import edu.utez.mx.restaurante.ui.components.images.CircularImage
 import edu.utez.mx.restaurante.viewmodel.CreateDishViewModel
 
 @Composable
-fun CreateDishScreen() {
+fun CreateDishScreen(nav : NavController) {
     val viewModel = remember { CreateDishViewModel() }
 
     Column(
@@ -70,7 +71,7 @@ fun CreateDishScreen() {
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF2196F3)
             ),
-            onClick = { viewModel.createDish() },
+            onClick = { nav.navigate("menu") },
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text("Crear Platillo")
@@ -79,7 +80,7 @@ fun CreateDishScreen() {
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF2196F3)
             ),
-            onClick = { viewModel.createDish() },
+            onClick = { nav.navigate("menu") },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Cancelar")
@@ -87,8 +88,4 @@ fun CreateDishScreen() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun CreateDishScreenPreview() {
-    CreateDishScreen()
-}
+

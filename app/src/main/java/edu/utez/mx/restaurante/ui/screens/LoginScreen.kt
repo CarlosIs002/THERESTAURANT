@@ -70,7 +70,7 @@ fun LoginScreen(viewModel: LoginViewModel, navController: NavController) {
             modifier = Modifier
         ){
             PrimaryButton("Registrar"){
-                navController.navigate("registro")
+                navController.navigate("registeruser")
             }
             Spacer(modifier = Modifier.padding(5.dp))
             PrimaryButton("Iniciar sesión") {
