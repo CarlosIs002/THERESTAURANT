@@ -54,7 +54,7 @@ fun PlatilloCard(
                     fontWeight = FontWeight.SemiBold
                 )  // DESCRIPCIÓN
                 Text(
-                    text = p.descripcion,
+                    text = p.descripcion ?: "",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 2,

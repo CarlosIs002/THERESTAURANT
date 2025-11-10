@@ -3,39 +3,34 @@ package edu.utez.mx.restaurante.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import edu.utez.mx.restaurante.R
 import edu.utez.mx.restaurante.data.model.Platillo
+import edu.utez.mx.restaurante.data.repository.PlatilloRepository
+import kotlinx.coroutines.launch
 
-class CreateDishViewModel {
+class CreateDishViewModel(private val repository: PlatilloRepository) : ViewModel() {
     var nombre by mutableStateOf("")
     var descripcion by mutableStateOf("")
     var precio by mutableStateOf("")
-    var image by mutableStateOf(0) // Placeholder
 
     fun createDish() {
         val precioDouble = precio.toDoubleOrNull()
 
         if (nombre.isNotBlank() && descripcion.isNotBlank() && precioDouble != null) {
-            val newDish = Platillo(
-                id = 0, // El ID debería ser generado por tu backend/base de datos
-                nombre = nombre,
-                descripcion = descripcion,
-                precio = precioDouble,
-                image = image
-            )
-
-            // TODO: Aquí llamarías al repositorio para guardar el nuevo platillo
-            println("Platillo creado: $newDish")
-
-            clearFields()
+            viewModelScope.launch {
+                repository.crear(
+                    Platillo(
+                        nombre = nombre,
+                        descripcion = descripcion,
+                        precio = precioDouble,
+                        image = R.drawable.enchiladas // Placeholder
+                    )
+                )
+            }
         } else {
-            // TODO: Mostrar un mensaje de error al usuario
-            println("Error: Todos los campos son requeridos")
+            // TODO: Show error
         }
-    }
-
-    private fun clearFields() {
-        nombre = ""
-        descripcion = ""
-        precio = ""
     }
 }

@@ -3,8 +3,12 @@ package edu.utez.mx.restaurante.ui.components.dinamiclists
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -21,7 +25,8 @@ fun DishCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .clickable(onClick = onClick),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(
@@ -32,7 +37,7 @@ fun DishCard(
                 contentDescription = "Imagen de platillo"
             )
             Text(
-                text = "$item.id",
+                text = "#${item.id}",
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold
             )
@@ -41,11 +46,11 @@ fun DishCard(
                 fontSize = 14.sp
             )
             Text(
-                text = "Precio: $$item.precio",
+                text = "Precio: $${item.precio}",
                 fontSize = 14.sp
             )
             Text(
-                text = item.descripcion,
+                text = item.descripcion ?: "",
                 fontSize = 18.sp
             )
         }

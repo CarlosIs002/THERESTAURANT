@@ -1,38 +1,39 @@
 package edu.utez.mx.restaurante.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import edu.utez.mx.restaurante.R
 import edu.utez.mx.restaurante.data.model.Platillo
-import kotlinx.coroutines.flow.MutableStateFlow
+import edu.utez.mx.restaurante.data.repository.PlatilloRepository
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
-class PlatilloListViewModel : ViewModel() {
+class PlatilloListViewModel(private val repository: PlatilloRepository) : ViewModel() {
 
-    // 1) Estado interno (mutable solo para el VM)
-    private val _items = MutableStateFlow<List<Platillo>>(emptyList())
-
-    // 2) Exposición a la UI (inmutable)
-    val items: StateFlow<List<Platillo>> = _items
+    val items: StateFlow<List<Platillo>> = repository.listar()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000L),
+            initialValue = emptyList()
+        )
 
     init {
-        loadItems()
+        viewModelScope.launch {
+            if (repository.listar().first().isEmpty()) {
+                repository.crear(Platillo(nombre = "Pollo en salsa verde", descripcion = "Tiene queso", precio = 70.0, image = R.drawable.enchiladas))
+                repository.crear(Platillo(nombre = "Pozonque", descripcion = "Tiene queso", precio = 70.0, image = R.drawable.enchiladas))
+                repository.crear(Platillo(nombre = "Enchiladas negras", descripcion = "Tiene queso", precio = 70.0, image = R.drawable.enchiladas))
+                repository.crear(Platillo(nombre = "Enchiladas verdes", descripcion = "Tiene queso", precio = 70.0, image = R.drawable.enchiladas))
+                repository.crear(Platillo(nombre = "Enchiladas rojas", descripcion = "Tiene queso", precio = 70.0, image = R.drawable.enchiladas))
+            }
+        }
     }
 
-    // 3) Evento desde la UI
     fun onItemClicked(item: Platillo) {
         println("Click en platillo: ${item.nombre}")
         // Aquí podrías disparar navegación, selección, etc.
-    }
-
-    private fun loadItems() {
-        // Demo: usa tu imagen enchiladas.jpg en /res/drawable (R.drawable.enchiladas)
-        _items.value = listOf(
-            Platillo(1, R.drawable.enchiladas, "Pollo en salsa verde", "Tiene queso", 70.0  ),
-            Platillo(2, R.drawable.enchiladas, "Pozonque", "Tiene queso", 70.0  ),
-            Platillo(3, R.drawable.enchiladas, "Enchiladas negras", "Tiene queso", 70.0  ),
-            Platillo(4, R.drawable.enchiladas, "Enchiladas verdes", "Tiene queso", 70.0  ),
-            Platillo(5, R.drawable.enchiladas, "Enchiladas rojas", "Tiene queso", 70.0  ),
-
-            )
     }
 }
