@@ -2,6 +2,7 @@ package edu.utez.mx.restaurante.ui.screens
 
 import Title
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -37,6 +39,18 @@ import edu.utez.mx.restaurante.viewmodel.PlatilloUiState
 @Composable
 fun EditDishScreen(viewModel: EditDishViewModel, nav: NavController) {
     val uiState by viewModel.uiState.collectAsState()
+
+    if (uiState.image == 0) {
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+    } else {
+        EditDishContent(uiState, viewModel, nav)
+    }
+}
+
+@Composable
+fun EditDishContent(uiState: PlatilloUiState, viewModel: EditDishViewModel, nav: NavController) {
     var showDeleteConfirmation by remember { mutableStateOf(false) }
 
     Column(
